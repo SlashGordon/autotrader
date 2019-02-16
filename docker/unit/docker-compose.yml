@@ -1,0 +1,37 @@
+version: "3"
+services:
+    python:
+        build:
+            context: ../..
+            dockerfile: ./docker/unit/autotrader/Dockerfile
+        links:
+            - mysqltest
+        image: autotrader:0.0.0
+        container_name: autotrader_test
+        depends_on:
+            - mysqltest
+        networks:
+            - default
+            - backend
+        tty: true
+    mysqltest:
+        image: mysql:5.7.22
+        build:
+            context: ../..
+            dockerfile: ./docker/unit/mysql/Dockerfile
+        ports: 
+            - "3306:3306"
+        container_name: mysql_test
+        environment:
+            MYSQL_DATABASE: unit_test
+            MYSQL_USER: test
+            MYSQL_PASSWORD: test
+            MYSQL_ROOT_PASSWORD: test
+            TZ: Europe/Berlin
+        volumes:
+            - ./data/:/docker-entrypoint-initdb.d
+        networks:
+            - backend
+networks:
+  backend:
+    internal: true

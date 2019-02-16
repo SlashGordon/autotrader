@@ -1,0 +1,5 @@
+[MASTER]
+ignore=migrate
+[TYPECHECK]
+
+ignored-modules = numpy
